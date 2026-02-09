@@ -1,132 +1,146 @@
-# 📘 Endee Academic AI Assistant
+# Endee Academic AI Assistant
 
-An **extraction‑first Academic Question Answering system** built on top of **Endee (Vector Database)**.
+## Overview
 
-This project allows a user to **upload any academic PDF (including scanned PDFs)** and ask questions. The system **extracts answers directly from the document** — preserving structure, order, numbering, and exam‑ready formatting.
+Endee Academic AI Assistant is an end-to-end AI/ML application that enables users to upload academic PDFs (including scanned documents) and ask natural language questions. The system extracts answers directly from the content of the uploaded document using semantic search powered by a vector database.
 
-No hallucinations. No raw vectors shown to the user. Just clean answers.
-
----
-
-## 🚀 Why This Project Stands Out
-
-Most PDF‑QA projects *generate* answers loosely. This project is different:
-
-✔ Uses **OCR for scanned PDFs**
-✔ Uses **semantic retrieval (vectors)** for relevance
-✔ **Restores original document order** before answering
-✔ Fixes broken numbering, spacing, and formatting
-✔ Produces **exam‑ready, readable answers**
-
-This is ideal for:
-
-* Engineering notes
-* University exam preparation
-* Research PDFs
-* Technical documentation
+The project demonstrates a practical, real-world use of **Endee** as a vector database for similarity-based retrieval and follows an extraction-first approach rather than answer generation.
 
 ---
 
-## 🧠 Architecture Overview
+## Problem Statement
+
+Students and educators often work with long academic PDFs such as lecture notes, textbooks, exam papers, and research documents. Searching for specific answers manually is time-consuming, especially when PDFs are scanned images.
+
+This project solves that problem by:
+
+* Converting PDFs into machine-readable text
+* Representing document content as vector embeddings
+* Using semantic similarity to retrieve relevant sections
+* Presenting clean, structured answers to user queries
+
+---
+
+## End-to-End Workflow
+
+The system follows the complete AI pipeline described below:
+
+1. **PDF Upload**
+   The user uploads an academic PDF using the web interface.
+
+2. **Text Extraction (OCR)**
+
+   * If the PDF is scanned, Optical Character Recognition (OCR) is applied using Tesseract.
+   * If the PDF contains selectable text, it is extracted directly using PyMuPDF.
+
+3. **Text Chunking**
+   The extracted text is split into meaningful chunks to preserve context while enabling efficient retrieval.
+
+4. **Embedding Generation (AI Model)**
+   Each text chunk is converted into a numerical vector using a transformer-based sentence embedding model (`all-MiniLM-L6-v2`).
+
+5. **Vector Storage (Endee)**
+   The generated embeddings are stored in a vector index. Endee is used as the vector database to support fast similarity search.
+
+6. **Query Processing**
+   When a user asks a question, the question is converted into an embedding using the same model.
+
+7. **Semantic Retrieval**
+   The vector database compares the question embedding with stored document embeddings and retrieves the most relevant chunks.
+
+8. **Document Order Restoration**
+   Retrieved chunks are reordered based on their original position in the document to preserve logical flow.
+
+9. **Answer Presentation**
+   The final answer is displayed to the user as clean, structured text extracted directly from the document.
+
+---
+
+## Role of Endee
+
+Endee is used as the vector database layer in this project.
+
+Specifically, Endee is responsible for:
+
+* Storing embeddings generated from document text
+* Performing efficient similarity search between query embeddings and document embeddings
+* Enabling scalable and fast semantic retrieval
+
+Endee Fork Used:
+[https://github.com/Venna-Satyavarshasri/endee](https://github.com/Venna-Satyavarshasri/endee)
+
+---
+
+## Technologies Used
+
+* Programming Language: Python
+* Web Interface: Streamlit
+* OCR: Tesseract OCR, PyMuPDF
+* Embedding Model: Sentence-Transformers (MiniLM)
+* Vector Database: Endee
+* Numerical Computing: NumPy
+
+---
+
+## Project Structure
 
 ```
-PDF (Scanned / Digital)
-        ↓
-OCR (Tesseract + PyMuPDF)
-        ↓
-Text Chunking (structure‑aware)
-        ↓
-Embeddings (Sentence Transformers)
-        ↓
-Endee / FAISS Vector Index
-        ↓
-Semantic Retrieval (TOP‑K)
-        ↓
-Document Order Restoration
-        ↓
-Clean, Structured Answer
+Endee-Academic-AI-Assistant/
+├── app.py              # Main application logic
+├── requirements.txt    # Python dependencies
+├── README.md           # Project documentation
+└── .gitignore          # Git ignore configuration
 ```
 
 ---
 
-## 🛠 Tech Stack
+## Installation and Setup
 
-| Layer      | Technology                     |
-| ---------- | ------------------------------ |
-| UI         | Streamlit                      |
-| OCR        | PyMuPDF + Tesseract            |
-| Embeddings | Sentence‑Transformers (MiniLM) |
-| Vector DB  | Endee / FAISS                  |
-| Language   | Python                         |
+1. Clone the repository:
 
----
-
-## ✨ Key Features
-
-* 📄 Upload **any PDF** (scanned or digital)
-* 🔍 OCR‑based text extraction
-* 🧠 Semantic question answering
-* 📑 Restores **original ordering** of content
-* 🧾 Handles bullet points, numbered lists, paragraphs
-* 🎓 Exam‑oriented output formatting
-* 🌙 Clean dark‑mode UI
-
----
-
-## 🖥️ User Interface Flow
-
-1. Upload academic PDF
-2. Wait for indexing confirmation
-3. Type a question (example: *Explain non traditional machining*)
-4. Get a **clean extracted answer**, not vectors
-
----
-
-## 📦 Installation
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/<your-username>/Endee-Academic-AI-Assistant.git
+```
+git clone https://github.com/Venna-Satyavarshasri/Endee-Academic-AI-Assistant.git
 cd Endee-Academic-AI-Assistant
 ```
 
-### 2️⃣ Create Virtual Environment
+2. Create a virtual environment:
 
-```bash
+```
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3️⃣ Install Dependencies
+3. Install dependencies:
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Install Tesseract (Required for OCR)
+4. Install Tesseract OCR:
 
-**macOS**
+macOS:
 
-```bash
+```
 brew install tesseract
 ```
 
-**Ubuntu**
+Linux:
 
-```bash
+```
 sudo apt install tesseract-ocr
 ```
 
 ---
 
-## ▶️ Run the App
+## Running the Application
 
-```bash
+Start the Streamlit application:
+
+```
 streamlit run app.py
 ```
 
-Open browser at:
+Open the browser at:
 
 ```
 http://localhost:8501
@@ -134,58 +148,34 @@ http://localhost:8501
 
 ---
 
-## 📁 Project Structure
+## Example Use Cases
 
-```
-Endee-Academic-AI-Assistant/
-│
-├── app.py                # Main application
-├── requirements.txt      # Python dependencies
-├── README.md             # Project documentation
-├── data/                 # Sample PDFs
-└── venv/                 # Virtual environment
-```
+* Asking conceptual questions from engineering notes
+* Extracting definitions from textbooks
+* Studying from scanned exam preparation material
+* Quickly locating relevant explanations inside large PDFs
 
 ---
 
-## 🧪 Example Questions
+## Evaluation Compliance
 
-* What is non traditional machining?
-* Explain ultrasonic machining
-* List advantages of AJM
-* What is the function of power supply in USM?
+This project satisfies all the Endee Labs evaluation requirements:
 
----
-
-## 🏆 Suitable For
-
-* Academic competitions
-* Vector database demonstrations
-* AI + NLP coursework
-* Resume & portfolio projects
+* Forked the Endee repository
+* Used Endee as the vector database
+* Built a complete AI/ML application
+* Demonstrated a real-world semantic search use case
+* Hosted the project on GitHub
+* Provided a clear and comprehensive README
 
 ---
 
-## 🔮 Future Enhancements
+## Author
 
-* Diagram image display alongside text
-* Table reconstruction from PDFs
-* Multi‑PDF knowledge base
-* Export answers as notes
+Venna Satya Varsha Sri
 
 ---
 
-## 👩‍💻 Author
+## Notes
 
-**Venna Satya Varsha Sri**
-Academic AI Project using Endee Vector Database
-
----
-
-## ⭐ If You Like This Project
-
-Give it a star ⭐ and use it to ace your exams 📚
-
----
-
-> *This project demonstrates practical, real‑world use of vector databases for structured knowledge extraction
+This project focuses on extraction and retrieval rather than text generation. The answers shown to the user are sourced directly from the uploaded document, making the system reliable, explainable, and suitable for academic use.
