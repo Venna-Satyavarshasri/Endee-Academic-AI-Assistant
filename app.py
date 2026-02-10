@@ -6,7 +6,6 @@ import pytesseract
 from PIL import Image
 from sentence_transformers import SentenceTransformer
 
-# ================= CONFIG =================
 CHUNK_SIZE = 350          # Bigger chunks = better structure
 TOP_K = 8                # Pull more context
 OCR_DPI = 300
@@ -114,7 +113,7 @@ if "index" not in st.session_state:
 
 # ================= PDF UPLOAD =================
 st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.subheader("📄 Upload PDF")
+st.subheader("Upload PDF")
 
 uploaded_pdf = st.file_uploader(
     "Scanned PDFs, notes, question banks supported",
@@ -145,7 +144,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 # ================= QUESTION =================
 st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.subheader("❓ Ask a Question")
+st.subheader("Ask a Question")
 
 question = st.text_input(
     "Example: Explain ultrasonic machining",
@@ -158,7 +157,7 @@ if question:
     if st.session_state.index is None:
         st.warning("Upload a PDF first.")
     else:
-        with st.spinner("🧠 Extracting relevant sections..."):
+        with st.spinner("Extracting relevant sections..."):
             q_vec = model.encode([question])
             _, indices = st.session_state.index.search(
                 np.array(q_vec).astype("float32"),
@@ -178,7 +177,7 @@ if question:
 
         st.markdown("""
         <div class="card">
-        <h3>✅ Answer</h3>
+        <h3>Answer</h3>
         <div class="answer-box">
         """ + final_answer + """
         </div>
