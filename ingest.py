@@ -22,4 +22,4 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(f"[CHUNK {i}]\n")
         f.write(chunk.strip() + "\n\n")
 
-print(f"✅ Exported {len(chunks)} chunks to chunks.txt")
+print(f"Exported {len(chunks)} chunks to chunks.txt")
